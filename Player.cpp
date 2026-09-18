@@ -1,11 +1,11 @@
 #include "Player.h"
-#include "Engine\\Model.h"
-#include "Engine\\Input.h"
+#include "Engine/Model.h"
+#include "Engine/Input.h"
 #include "Bullet.h"
 
 Player::Player(GameObject* parent)
 // 親のポインタ、オブジェクトの名前
-	:GameObject(parent, "Player"),hModel_(-1)
+	:GameObject(parent, "Player"), hModel_(-1)
 {
 }
 
@@ -37,9 +37,29 @@ void Player::Update()
 		transform_.position_.y = transform_.position_.y + 0.25f;
 	}
 
+	// 自機が画面外へ移動しないように、X座標を画面内の範囲に制限する
+	if (transform_.position_.x < -7.0f)
+	{
+		transform_.position_.x = -7.0f;
+	}
+	if (transform_.position_.x > 7.0f)
+	{
+		transform_.position_.x = 7.0f;
+	}
+
+	// 自機が画面外へ移動しないように、Y座標を画面内の範囲に制限する
+	if (transform_.position_.y < 0.0f)
+	{
+		transform_.position_.y = 0.0f;
+	}
+	if (transform_.position_.y > 8.0f)
+	{
+		transform_.position_.y = 8.0f;
+	}
+
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
-		Bullet *pBullet = Instantiate<Bullet>(this->GetParent());
+		Bullet* pBullet = Instantiate<Bullet>(this->GetParent());
 		pBullet->SetPosition(transform_.position_);
 	}
 }
